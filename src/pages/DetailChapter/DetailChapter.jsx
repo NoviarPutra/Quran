@@ -29,13 +29,18 @@ const DetailChapter = () => {
           </Breadcrumb>
         </Col>
       </Row>
-      <p className="h3 d-flex justify-content-center font-weight-bold">
+      <p className="h3 d-flex justify-content-center font-weight-bold mt-3">
         {title}
       </p>
       <Container>
-        {detail.short_text && (
-          <p className="h6 text-justify mt-3">{detail.short_text}</p>
-        )}
+        <div
+          dangerouslySetInnerHTML={{
+            __html: `${detail.text}`,
+          }}
+        ></div>
+        <p className="d-flex justify-content-center font-italic font-weight-bold">
+          Source : {detail.source}
+        </p>
       </Container>
     </>
   );

@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { Card, Col, Row } from "react-bootstrap";
+import {
+  Card,
+  Col,
+  Container,
+  Dropdown,
+  DropdownButton,
+  ProgressBar,
+  Row,
+} from "react-bootstrap";
 
 const Chapter = () => {
   const [surah, setSurah] = useState([]);
@@ -15,36 +23,24 @@ const Chapter = () => {
       });
   };
 
-  const handleHistory = (id, title) => {
+  const handleDescription = (id, title) => {
     history.push(`/detail-chapter/${id}`, { title: title });
   };
 
+  const handleRecite = (id, title, verses_count) => {
+    history.push(`/detail-chapter/${id}/${title}`, {
+      title: title,
+      verses_count: verses_count,
+    });
+  };
+
   const IsEmpty = () => (
-    <Card border="secondary" style={{ width: "18rem" }}>
-      <Card.Header>
-        <Row>
-          <Col>
-            <p className="h6">Surah : Loading ...</p>
-          </Col>
-          <Col className="d-flex justify-content-end">
-            <p className="h6">Loading ...</p>
-          </Col>
-        </Row>
-      </Card.Header>
-      <Card.Body>
-        <Card.Title className="d-flex justify-content-end">
-          Loading ...
-        </Card.Title>
-        <Row>
-          <Col>
-            <p className="h6">Loading ...</p>
-          </Col>
-          <Col>
-            <p className="h6">Loading ...</p>
-          </Col>
-        </Row>
-      </Card.Body>
-    </Card>
+    <Container className="m-auto col-6 ">
+      <ProgressBar animated now={100} className="mt-5" />
+      <p className="h6 text-muted font-italic font-weight-bold d-flex justify-content-center">
+        Wait a sec ...
+      </p>
+    </Container>
   );
 
   useEffect(() => {
@@ -59,8 +55,7 @@ const Chapter = () => {
             <Card
               className="m-3"
               border="secondary"
-              style={{ width: "26rem", height: "12rem", cursor: "pointer" }}
-              onClick={() => handleHistory(s.id, s.name_simple)}
+              style={{ width: "26rem", height: "12rem" }}
             >
               <Card.Header>
                 <Row>
@@ -73,9 +68,37 @@ const Chapter = () => {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <Card.Title className="d-flex justify-content-center font-weight-bold">
-                  {s.name_arabic}
-                </Card.Title>
+                <Row>
+                  <Col sm={11}>
+                    <Card.Title className="d-flex justify-content-center font-weight-bold m-auto">
+                      {s.name_arabic}
+                    </Card.Title>
+                  </Col>
+                  <Col sm={1}>
+                    <DropdownButton
+                      id="dropdown-item-button"
+                      title="Menu"
+                      size="sm"
+                      className="d-flex justify-content-end"
+                      variant="secondary"
+                    >
+                      <Dropdown.Item
+                        as="button"
+                        onClick={() =>
+                          handleRecite(s.id, s.name_simple, s.verses_count)
+                        }
+                      >
+                        Recite
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        as="button"
+                        onClick={() => handleDescription(s.id, s.name_simple)}
+                      >
+                        Description
+                      </Dropdown.Item>
+                    </DropdownButton>
+                  </Col>
+                </Row>
                 <p className="h4 d-flex justify-content-center font-weight-bold font-italic">
                   {s.translated_name.name}
                 </p>
