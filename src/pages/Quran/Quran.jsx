@@ -5,7 +5,7 @@ import Chapter from "../Components/Chapter/Chapter";
 const Quran = () => {
   return (
     <>
-      <Row className="justify-content-center">
+      <Row className="justify-content-center m-auto">
         <Col sm={2}>
           <FormGroup className="mt-5 mb-3">
             <FormControl
@@ -17,8 +17,8 @@ const Quran = () => {
           </FormGroup>
         </Col>
       </Row>
-      <Row className="justify-content-center">
-        <Col sm={10}>
+      <Row className="justify-content-center col-12 m-auto">
+        <Col>
           <Breadcrumb>
             <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
             <Breadcrumb.Item active>Al-Qur'an</Breadcrumb.Item>
