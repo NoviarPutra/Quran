@@ -2,20 +2,19 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
   Breadcrumb,
+  Card,
   Col,
   Container,
   ProgressBar,
   Row,
-  Table,
 } from "react-bootstrap";
 import { useLocation, useParams } from "react-router";
 
 const DetailRecite = () => {
   const { id } = useParams();
   const location = useLocation();
-  const [verses, setVerses] = useState([]);
+  const [ayat, setAyat] = useState([]);
   const title = location.state.title;
-  const verses_count = location.state.verses_count;
   const IsEmpty = () => (
     <Container className="m-auto col-6 ">
       <ProgressBar animated now={100} className="mt-5" />
@@ -24,13 +23,14 @@ const DetailRecite = () => {
       </p>
     </Container>
   );
-  console.log(verses);
   useEffect(() => {
     const fetchRecite = () => {
       return axios
-        .get(`https://api.quran.com/api/v4/quran/verses/imlaei`)
+        .get(
+          `https://al-quran-8d642.firebaseio.com/surat/${id}.json?print=pretty`
+        )
         .then((response) => {
-          return setVerses(response.data.verses);
+          return setAyat(response.data);
         });
     };
     fetchRecite();
@@ -50,26 +50,26 @@ const DetailRecite = () => {
         {title}
       </p>
       <Container>
-        <Table responsive="md">
-          <thead className="text-center">
-            <tr>
-              <th>Translation</th>
-              <th className="d-flex justify-content-end">Verses</th>
-            </tr>
-          </thead>
-          <tbody>
-            {verses.length > 0
-              ? verses.map((verse, index) => (
-                  <tr key={index}>
-                    <td>Translate</td>
-                    <td className="d-flex justify-content-end">
-                      {verse.text_imlaei}
-                    </td>
-                  </tr>
-                ))
-              : null}
-          </tbody>
-        </Table>
+        {ayat.length > 0 ? (
+          ayat.map((ayat, index) => (
+            <Card body className="mb-3" border="white" key={ayat.nomor}>
+              <div>
+                <p className="h6 d-flex justify-content-end font-weight-bold m-auto">
+                  {ayat.ar}
+                </p>
+                <div className="mt-5">
+                  <p className="h6 text-muted text-justify font-italic">
+                    {ayat.id}
+                  </p>
+                </div>
+              </div>
+            </Card>
+          ))
+        ) : (
+          <Row className="col-12 m-auto">
+            <IsEmpty />
+          </Row>
+        )}
       </Container>
     </>
   );

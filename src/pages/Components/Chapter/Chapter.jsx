@@ -17,14 +17,16 @@ const Chapter = () => {
 
   const fetchSurah = () => {
     axios
-      .get("https://api.quran.com/api/v4/chapters?language=en")
+      .get("https://al-quran-8d642.firebaseio.com/data.json?print=pretty")
       .then((response) => {
-        setSurah(response.data.chapters);
+        setSurah(response.data);
       });
   };
-
-  const handleDescription = (id, title) => {
-    history.push(`/detail-chapter/${id}`, { title: title });
+  const handleDescription = (id, title, deskripsi) => {
+    history.push(`/detail-chapter/${id}`, {
+      title: title,
+      deskripsi: deskripsi,
+    });
   };
 
   const handleRecite = (id, title, verses_count) => {
@@ -51,7 +53,7 @@ const Chapter = () => {
     <Row className="col-12 m-auto">
       {surah.length > 0 ? (
         surah.map((s) => (
-          <Col sm={4} key={s.id}>
+          <Col sm={4} key={s.nomor}>
             <Card
               className="m-3"
               border="secondary"
@@ -60,10 +62,10 @@ const Chapter = () => {
               <Card.Header>
                 <Row>
                   <Col>
-                    <p className="h6">Surah : {s.id}</p>
+                    <p className="h6">Surah : {s.nomor}</p>
                   </Col>
                   <Col className="d-flex justify-content-end">
-                    <p className="h6">{s.name_simple}</p>
+                    <p className="h6">{s.nama}</p>
                   </Col>
                 </Row>
               </Card.Header>
@@ -71,7 +73,7 @@ const Chapter = () => {
                 <Row>
                   <Col sm={11}>
                     <Card.Title className="d-flex justify-content-center font-weight-bold m-auto">
-                      {s.name_arabic}
+                      {s.asma}
                     </Card.Title>
                   </Col>
                   <Col sm={1}>
@@ -84,33 +86,33 @@ const Chapter = () => {
                     >
                       <Dropdown.Item
                         as="button"
-                        onClick={() =>
-                          handleRecite(s.id, s.name_simple, s.verses_count)
-                        }
+                        onClick={() => handleRecite(s.nomor, s.nama)}
                       >
-                        Recite
+                        Baca
                       </Dropdown.Item>
                       <Dropdown.Item
                         as="button"
-                        onClick={() => handleDescription(s.id, s.name_simple)}
+                        onClick={() =>
+                          handleDescription(s.nomor, s.nama, s.keterangan)
+                        }
                       >
-                        Description
+                        Deskripsi
                       </Dropdown.Item>
                     </DropdownButton>
                   </Col>
                 </Row>
                 <p className="h4 d-flex justify-content-center font-weight-bold font-italic">
-                  {s.translated_name.name}
+                  {s.arti}
                 </p>
                 <Row className="mt-2">
                   <Col>
                     <p className="h6 text-uppercase">
-                      Revelation Place : {s.revelation_place}
+                      Surah diturunkan: {s.type}
                     </p>
                   </Col>
                   <Col>
                     <p className="h6 d-flex justify-content-end">
-                      Verses : {s.verses_count}
+                      Ayat : {s.ayat}
                     </p>
                   </Col>
                 </Row>

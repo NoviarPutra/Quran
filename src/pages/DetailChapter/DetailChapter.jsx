@@ -1,24 +1,11 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Breadcrumb, Col, Container, Row } from "react-bootstrap";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const DetailChapter = () => {
-  const { id } = useParams();
   const location = useLocation();
   const title = location.state.title;
-  const [detail, setDetail] = useState({});
-  useEffect(() => {
-    const fetchDetail = () => {
-      return axios
-        .get(`https://api.quran.com/api/v4/chapters/${id}/info?language=en`)
-        .then((response) => {
-          return setDetail(response.data.chapter_info);
-        });
-    };
-    fetchDetail();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const deskripsi = location.state.deskripsi;
   return (
     <>
       <Row className="justify-content-center col-12 m-auto">
@@ -34,13 +21,11 @@ const DetailChapter = () => {
       </p>
       <Container>
         <div
+          className="text-justify"
           dangerouslySetInnerHTML={{
-            __html: `${detail.text}`,
+            __html: `${deskripsi}`,
           }}
         ></div>
-        <p className="d-flex justify-content-center font-italic font-weight-bold">
-          Source : {detail.source}
-        </p>
       </Container>
     </>
   );
